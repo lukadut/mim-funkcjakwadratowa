@@ -3,8 +3,14 @@ package c.c.quadraticfunction.solvers;
 import java.util.List;
 
 /**
- * Created by admin on 2016-03-09.
+ * Interfejs do tworzenia rozwiązywaczy
  */
 public interface PolynomialEquation {
+
+    /**
+     * Rozwiązywanie równania
+     * @return wynik w postaci List&le;Double&ge;
+     * @throws Exception
+     */
     public List<Double> compute() throws Exception;
 }

@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
     EditText editTextA,editTextB,editTextC;
     Double parameterA = 0.0,parameterB = 0.0,parameterC = 0.0;
     TextView textViewResults;
-    SolverFactory sf ;
+    CharSequence result;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +33,11 @@ public class MainActivity extends AppCompatActivity {
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                parameterA = parseEditText(editTextA);
+                parameterB = parseEditText(editTextB);
+                parameterC = parseEditText(editTextC);
+
                 compute();
             }
         });
@@ -41,15 +46,11 @@ public class MainActivity extends AppCompatActivity {
             parameterA = getBundleDouble(savedInstanceState, "paramA", 0.0);
             parameterB = getBundleDouble(savedInstanceState, "paramB", 0.0);
             parameterC = getBundleDouble(savedInstanceState, "paramC", 0.0);
-            textViewResults.setText(getBundleString(savedInstanceState, "result", ""));
+            compute();
         }
     }
 
     public void compute(){
-        parameterA = parseEditText(editTextA);
-        parameterB = parseEditText(editTextB);
-        parameterC = parseEditText(editTextC);
-
         PolynomialEquation solver = SolverFactory.getSolver(parameterC,parameterB,parameterA);
         try {
             List results = solver.compute();
@@ -71,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
             i++;
         }
         textViewResults.setText(Html.fromHtml(sb.toString()));
-
+        result = sb.toString();
     }
     private void showExceptionMessage(Exception e){
         String packageName = getPackageName();
         int resId = getResources().getIdentifier(e.getMessage(), "string", packageName);
         textViewResults.setText(getString(resId));
+        result = getString(resId);
     }
 
     @Override
@@ -85,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         savedInstanceState.putDouble("paramA", parameterA);
         savedInstanceState.putDouble("paramB", parameterB);
         savedInstanceState.putDouble("paramC", parameterC);
-        savedInstanceState.putString("result", textViewResults.getText().toString());
+        savedInstanceState.putCharSequence("result", result);
     }
 
     private double parseEditText(EditText editText){
@@ -101,11 +103,11 @@ public class MainActivity extends AppCompatActivity {
             value = def;
         return value;
     }
-    private String getBundleString(Bundle b, String key, String def)
-    {
-        String value = b.getString(key);
-        if (value == null)
-            value = def;
-        return value;
-    }
+//    private CharSequence getBundleString(Bundle b, String key, String def)
+//    {
+//        CharSequence value = b.getCharSequence(key);
+//        if (value == null)
+//            value = def;
+//        return Html.fromHtml(value.toString());
+//    }
 }

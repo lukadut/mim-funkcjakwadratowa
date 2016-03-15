@@ -3,25 +3,29 @@ package c.c.quadraticfunction.solvers;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * Created by admin on 2016-03-09.
+ * Klasa rozwiązująca równania liniowe
  */
 public class Linear implements PolynomialEquation {
-    public Linear(double b, double a) {
+    private double a,b;
+
+    Linear(double b, double a) {
         this.a = a;
         this.b = b;
     }
 
-    private double a,b;
-
+    /**
+     * Funkcja do obliczania rozwiązania równania liniowego
+     * @return Wyniki w List&le;Double&ge;
+     * @throws Exception
+     */
     @Override
     public List<Double> compute() throws Exception{
-        if(a == 0){
-            if(b == 0) {
-                throw new Exception("InconsistentEquationException");
+        if(a == 0){ // równanie 0 stopnia
+            if(b == 0) { // wyraz wolny = 0
+                throw new Exception("InconsistentEquationException"); // równanie nieoznaczone
             }
-            throw new Exception("NoSolutionException");
+            throw new Exception("NoSolutionException"); // równanie sprzeczne
         }
         List<Double> results = new ArrayList<>(1);
         results.add((0-b)/a);

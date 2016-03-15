@@ -1,21 +1,23 @@
 package c.c.quadraticfunction.solvers;
 
-import android.util.Log;
-
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
- * Created by admin on 2016-03-10.
+ * Fabryka rozwiązywaczy
  */
 public class SolverFactory {
     private static SolverFactory sf = null;
     private SolverFactory() {
     }
 
+    /**
+     * Funkcja zwracająca odpowiedniego rozwiązywacza na podstawie przekazanych argumentów
+     * @param params
+     *      współczynniki równania, w kolejności rosnącego stopnia
+     *      np. a0, a1, a2
+     * @return PolynomialEquation
+     *      rozwiązywacz do równania
+     */
     static public PolynomialEquation getSolver(double... params){
         if(sf==null){
             sf = new SolverFactory();
@@ -35,6 +37,12 @@ public class SolverFactory {
             }
         };
     }
+
+    /**
+     * Wylicza stopień równania na podstawie argumentów. Sprawdza najwyższy niezerowy współczynnik
+     * @param params
+     * @return
+     */
     private int polynomialDegree(double... params){
         int maxDegree = 0;
         for(int i=0;i<params.length;i++){
