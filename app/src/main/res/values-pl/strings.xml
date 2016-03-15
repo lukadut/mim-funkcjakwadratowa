@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Funkcja kwadratowa</string>
+    <string name="insertEquation">Wprowadź współczynniki równania</string>
+    <string name="compute">Oblicz</string>
+    <string name="NoSolutionException">Równanie sprzeczne</string>
+    <string name="InconsistentEquationException">Równanie nieoznaczone</string>
+    <string name="NonrealSolution">Równanie nie ma pierwiastków rzeczywistych</string>
+    <string name="NoSolver">Brak zdefiniowanego rozwiązywacza</string>
+</resources>

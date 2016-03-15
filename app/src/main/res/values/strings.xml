@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Quadratic function</string>
+    <string name="parameterA" translatable="false">a</string>
+    <string name="parameterB" translatable="false">b</string>
+    <string name="parameterC" translatable="false">c</string>
+    <string name="insertEquation">Insert parameters of equation</string>
+    <string name="equation" translatable="false">ax² + bx + c = 0</string>
+    <string name="compute">Compute</string>
+    <string name="NoSolutionException">Equation has no solution</string>
+    <string name="InconsistentEquationException">Solution can not be determined</string>
+    <string name="NonrealSolution">Equation has no real solution</string>
+    <string name="NoSolver">Solver not implemented</string>
+</resources>
