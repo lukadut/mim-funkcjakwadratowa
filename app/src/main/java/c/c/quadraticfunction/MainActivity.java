@@ -3,11 +3,11 @@ package c.c.quadraticfunction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -15,10 +15,10 @@ import c.c.quadraticfunction.solvers.PolynomialEquation;
 import c.c.quadraticfunction.solvers.SolverFactory;
 
 public class MainActivity extends AppCompatActivity {
-    EditText editTextA,editTextB,editTextC;
-    Double parameterA = 0.0,parameterB = 0.0,parameterC = 0.0;
-    TextView textViewResults;
-    CharSequence result;
+    private EditText editTextA,editTextB,editTextC;
+    private Double parameterA = 0.0,parameterB = 0.0,parameterC = 0.0;
+    private TextView textViewResults;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
         textViewResults = (TextView) findViewById(R.id.textViewResults);
 
         Button buttonOk = (Button) findViewById(R.id.buttonCompute);
+
+        /**
+         * Akcja wywoływana po naciśnięciu klawisza.
+         * Parsuje wartości z editTextów na liczby, a następnie wywołuje funkcję obliczającą
+         */
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -42,6 +47,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Akcja wywołana przy tworzeniu widoku (po zmianie orientacji).
+         * Przywraca zapisane wartości współczynników.
+         */
         if (savedInstanceState != null) {
             parameterA = getBundleDouble(savedInstanceState, "paramA", 0.0);
             parameterB = getBundleDouble(savedInstanceState, "paramB", 0.0);
@@ -50,6 +59,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Funkcja rozwiązująca równanie
+     */
     public void compute(){
         PolynomialEquation solver = SolverFactory.getSolver(parameterC,parameterB,parameterA);
         try {
@@ -60,6 +72,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Funkcja wyświetlająca rozwiązania równania
+     * @param results
+     */
     private void showResults(List<Double> results ){
         StringBuilder sb = new StringBuilder();
         int i=1;
@@ -72,30 +88,56 @@ public class MainActivity extends AppCompatActivity {
             i++;
         }
         textViewResults.setText(Html.fromHtml(sb.toString()));
-        result = sb.toString();
-    }
-    private void showExceptionMessage(Exception e){
-        String packageName = getPackageName();
-        int resId = getResources().getIdentifier(e.getMessage(), "string", packageName);
-        textViewResults.setText(getString(resId));
-        result = getString(resId);
     }
 
+    /**
+     * Funkcja wyświetlająca komunikaty, wyrzucone w wyjątkach przez rozwiązywacze
+     * @param e
+     */
+    private void showExceptionMessage(Exception e){
+        try {
+            String packageName = getPackageName();
+            int resId = getResources().getIdentifier(e.getMessage(), "string", packageName);
+            textViewResults.setText(getString(resId));
+        } catch (Exception exc){
+            Toast.makeText(this, getResources().getString(R.string.ApplicationError), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Zapisywanie współczynników
+     * @param savedInstanceState
+     */
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState){
         super.onSaveInstanceState(savedInstanceState);
         savedInstanceState.putDouble("paramA", parameterA);
         savedInstanceState.putDouble("paramB", parameterB);
         savedInstanceState.putDouble("paramC", parameterC);
-        savedInstanceState.putCharSequence("result", result);
     }
 
+    /**
+     * Funkcja parsująca tekst na liczby. W przypadku zerowego ciągu znaków zwraca 0
+     * @param editText
+     * @return
+     */
     private double parseEditText(EditText editText){
         String text = editText.getText().toString();
         text = text.equals("")? "0":text;
-        Log.d("parse", "text: " + text);
         return Double.parseDouble(text);
     }
+
+    /**
+     * Funkcja zwracająca zapisane w Bundle liczby. W przypadku nieistniejącego klucza, zwraca wartość domyślną
+     * @param b
+     * Bundle
+     * @param key
+     * Klucz
+     * @param def
+     * Wartość domyślna
+     * @return
+     * Zapisana liczba w Bundle albo 0
+     */
     public Double getBundleDouble(Bundle b, String key, Double def)
     {
         Double value = b.getDouble(key);
@@ -103,11 +145,5 @@ public class MainActivity extends AppCompatActivity {
             value = def;
         return value;
     }
-//    private CharSequence getBundleString(Bundle b, String key, String def)
-//    {
-//        CharSequence value = b.getCharSequence(key);
-//        if (value == null)
-//            value = def;
-//        return Html.fromHtml(value.toString());
-//    }
+
 }
