@@ -7,6 +7,4 @@
     <string name="InconsistentEquationException">Równanie nieoznaczone</string>
     <string name="NonrealSolution">Równanie nie ma pierwiastków rzeczywistych</string>
     <string name="NoSolver">Brak zdefiniowanego rozwiązywacza</string>
-    <string name="ApplicationError">Błąd aplikacji</string>
-    <string name="plot">Rysuj</string>
 </resources>

@@ -1,5 +1,6 @@
 package c.c.quadraticfunction;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Html;
@@ -16,8 +17,9 @@ import c.c.quadraticfunction.solvers.SolverFactory;
 
 public class MainActivity extends AppCompatActivity {
     private EditText editTextA,editTextB,editTextC;
-    private Double parameterA = 0.0,parameterB = 0.0,parameterC = 0.0;
+    private Double parameterA = 0.0,parameterB = 0.0,parameterC = 0.0, x1=null,x2=null;
     private TextView textViewResults;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
         textViewResults = (TextView) findViewById(R.id.textViewResults);
 
         Button buttonOk = (Button) findViewById(R.id.buttonCompute);
+        Button buttonDraw = (Button) findViewById(R.id.buttonDraw);
 
         /**
          * Akcja wywoływana po naciśnięciu klawisza.
@@ -38,14 +41,27 @@ public class MainActivity extends AppCompatActivity {
         buttonOk.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                parameterA = parseEditText(editTextA);
-                parameterB = parseEditText(editTextB);
-                parameterC = parseEditText(editTextC);
-
                 compute();
             }
         });
+
+
+        buttonDraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                compute();
+                Intent intent = new Intent(getApplicationContext(),Drawing.class);
+                intent.putExtra("a",parameterA);
+                intent.putExtra("b",parameterB);
+                intent.putExtra("c",parameterC);
+                intent.putExtra("x1",x1);
+                intent.putExtra("x2",x2);
+                startActivity(intent);
+            }
+        });
+
+
 
         /**
          * Akcja wywołana przy tworzeniu widoku (po zmianie orientacji).
@@ -63,7 +79,12 @@ public class MainActivity extends AppCompatActivity {
      * Funkcja rozwiązująca równanie
      */
     public void compute(){
+        parameterA = parseEditText(editTextA);
+        parameterB = parseEditText(editTextB);
+        parameterC = parseEditText(editTextC);
         PolynomialEquation solver = SolverFactory.getSolver(parameterC,parameterB,parameterA);
+        x1=null;
+        x2=null;
         try {
             List results = solver.compute();
             showResults(results);
@@ -79,6 +100,16 @@ public class MainActivity extends AppCompatActivity {
     private void showResults(List<Double> results ){
         StringBuilder sb = new StringBuilder();
         int i=1;
+        try{
+            x1 = results.get(0);
+        } catch (Exception e){
+
+        }
+        try{
+            x2 = results.get(1);
+        } catch (Exception e){
+
+        }
         for(double result:results){
             sb.append("X<sub><small> ");
             sb.append(i);
@@ -124,7 +155,13 @@ public class MainActivity extends AppCompatActivity {
     private double parseEditText(EditText editText){
         String text = editText.getText().toString();
         text = text.equals("")? "0":text;
-        return Double.parseDouble(text);
+        double d;
+        try {
+            d = Double.parseDouble(text);
+        } catch (Exception e){
+            d = 0.0;
+        }
+        return d;
     }
 
     /**

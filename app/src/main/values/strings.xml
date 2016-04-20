@@ -10,6 +10,4 @@
     <string name="InconsistentEquationException">Solution can not be determined</string>
     <string name="NonrealSolution">Equation has no real solution</string>
     <string name="NoSolver">Solver not implemented</string>
-    <string name="ApplicationError">Aplication error</string>
-    <string name="plot">Plot</string>
 </resources>
